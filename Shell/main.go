@@ -15,6 +15,10 @@ var (
 	ErrNoPath = errors.New("path required")
 )
 
+var commandHistory []string
+
+const historyLimit = 10 // Limit the history size to 10 commands
+
 func main() {
 	startShell()
 }
@@ -46,6 +50,12 @@ func handleInput(input string) error {
 		return nil
 	}
 
+	// Save the command to history
+	if len(commandHistory) >= historyLimit {
+		commandHistory = commandHistory[1:] // Remove the oldest command if limit reached
+	}
+	commandHistory = append(commandHistory, input)
+
 	// Split input into command and arguments
 	args := strings.Split(input, " ")
 	command := args[0]
@@ -62,7 +72,7 @@ func handleInput(input string) error {
 // isBuiltInCommand checks if a command is built-in
 func isBuiltInCommand(command string) bool {
 	switch command {
-	case "cd", "exit", "help", "ls", "dir":
+	case "cd", "exit", "help", "ls", "dir", "history":
 		return true
 	}
 	return false
@@ -80,8 +90,18 @@ func executeBuiltInCommand(command string, args []string) error {
 		return nil
 	case "ls", "dir":
 		return handleCrossPlatformDir(args)
+	case "history":
+		printHistory()
+		return nil
 	}
 	return fmt.Errorf("unknown built-in command: %s", command)
+}
+
+func printHistory() {
+	fmt.Println("Command History:")
+	for i, cmd := range commandHistory {
+		fmt.Printf("%d: %s\n", i+1, cmd)
+	}
 }
 
 // changeDirectory handles the 'cd' command
