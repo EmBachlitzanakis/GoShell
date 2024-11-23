@@ -10,7 +10,7 @@ GoShell is a lightweight, cross-platform shell built using Go. It allows you to 
   - `ls [path]` / `dir [path]` - List files in a directory (aliases `ls` to `dir` on Windows).
   - `exit` - Exit the shell.
   - `help` - Display the help message.
-  - 'history' - Display the history of commands.
+  - `history` - Display the history of commands.
 - **Customizable**: Easily extendable to add more built-in commands in the future.
 
 - ![image](https://github.com/user-attachments/assets/6af78e2a-e4b2-4d35-a6a9-1c08a56584cf)
