@@ -1,17 +1,43 @@
-# GoShell
+# **GoShell**
 
-GoShell is a lightweight, cross-platform shell built using Go. It allows you to execute basic commands, navigate directories, and interact with your system in a terminal-like environment. With support for both Windows and Unix-like systems (Linux/macOS), GoShell provides an easy-to-use interface for basic shell operations.
+GoShell is a lightweight, cross-platform shell built using Go. It allows you to execute basic commands, navigate directories, and interact with your system in a terminal-like environment. Designed for both Windows and Unix-like systems (Linux/macOS), GoShell provides a user-friendly interface for essential shell operations and includes dynamic features for enhanced usability.
 
-## Features
+---
 
-- **Cross-Platform**: Works on both Windows and Unix-like systems (Linux/macOS).
-- **Basic Shell Commands**:
-  - `cd [path]` - Change the current directory.
-  - `ls [path]` / `dir [path]` - List files in a directory (aliases `ls` to `dir` on Windows).
-  - `exit` - Exit the shell.
-  - `help` - Display the help message.
-  - `history` - Display the history of commands.
-- **Customizable**: Easily extendable to add more built-in commands in the future.
+## **Features**
 
-- ![image](https://github.com/user-attachments/assets/6af78e2a-e4b2-4d35-a6a9-1c08a56584cf)
+### **Core Functionalities**
+- **Cross-Platform Compatibility**: Works seamlessly on Windows, Linux, and macOS.
+- **Dynamic Prompt**: Displays the current working directory as part of the shell prompt.
+- **Command History**: Tracks the last 10 executed commands for quick reference.
+- **Custom Command Parsing**: Distinguishes between built-in and external commands for flexible execution.
+
+---
+
+### **Supported Commands**
+
+#### **Built-in Commands**
+
+| Command            | Description                                      |
+|--------------------|--------------------------------------------------|
+| `cd [path]`        | Change the current directory.                   |
+| `ls [path]`        | List files in a directory. Works cross-platform. |
+| `dir [path]`       | Alias for `ls`. On Windows, uses native behavior.|
+| `exit`             | Exit the shell.                                 |
+| `help`             | Display the help message with available commands.|
+| `history`          | Display the history of the last 10 commands.    |
+
+#### **External Commands**
+- If a command is not recognized as built-in, GoShell will attempt to execute it as an external system command using the native shell (`cmd` on Windows, `sh` on Unix-like systems).
+
+---
+
+## **Usage**
+
+### **Launch GoShell**
+1. Navigate to the `GoShell` directory in your terminal.
+2. Run the shell using:
+   ```bash
+   go run ./
+
 
