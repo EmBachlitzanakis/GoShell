@@ -5,6 +5,7 @@ import (
 	"Shell/utils"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"regexp"
 	"strings"
@@ -24,6 +25,33 @@ func SaveToHistory(cmd string) {
 
 func ExecuteCommand(args []string) error {
 	command := args[0]
+	// mapping := json.loads(json_data)
+	if len(args) == 0 {
+		return fmt.Errorf("no command provided")
+	}
+
+	// Load the command aliases from the JSON file
+	file, err := os.Open("command_aliases.json")
+	if err != nil {
+		return fmt.Errorf("failed to open JSON file: %w", err)
+	}
+	defer file.Close()
+
+	var mapping map[string]string
+	byteValue, err := io.ReadAll(file)
+	if err != nil {
+		return fmt.Errorf("failed to read JSON file: %w", err)
+	}
+
+	err = json.Unmarshal(byteValue, &mapping)
+	if err != nil {
+		return fmt.Errorf("failed to parse JSON file: %w", err)
+	}
+
+	if alias, exists := mapping[command]; exists {
+		command = alias
+	}
+	fmt.Println(command)
 	switch command {
 	case "cd":
 		return changeDirectory(args)
