@@ -51,7 +51,8 @@ func ExecuteCommand(args []string) error {
 	if alias, exists := mapping[command]; exists {
 		command = alias
 	}
-	fmt.Println(command)
+
+	commandCast := strings.Split(command, " ")
 	switch command {
 	case "cd":
 		return changeDirectory(args)
@@ -67,7 +68,7 @@ func ExecuteCommand(args []string) error {
 		return customizeCommand(args)
 	default:
 		// Pass unrecognized commands to the external execution logic
-		return execution.ExecuteExternalCommand(args)
+		return execution.ExecuteExternalCommand(commandCast)
 	}
 }
 
@@ -107,12 +108,13 @@ func printHistory() {
 
 func printHelp() {
 	fmt.Println("Supported commands:")
-	fmt.Println("  cd [path]    - Change directory")
-	fmt.Println("  history      - Show command history")
-	fmt.Println("  help         - Show help message")
-	fmt.Println("  dir [path]   - Show files in the directory")
-	fmt.Println("  ls  [path]   - Show files in the directory")
-	fmt.Println("  [command]    - Execute external shell command")
+	fmt.Println("  customize \"x\" \"y\"   - Customizes your y command to x")
+	fmt.Println("  cd [path]            - Change directory")
+	fmt.Println("  history              - Show command history")
+	fmt.Println("  help                 - Show help message")
+	fmt.Println("  dir [path]           - Show files in the directory")
+	fmt.Println("  ls [path]            - Show files in the directory")
+	fmt.Println("  [command]            - Execute external shell command")
 }
 
 func customizeCommand(args []string) error {
