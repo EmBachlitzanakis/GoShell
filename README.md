@@ -42,7 +42,7 @@ GoShell introduces the ability to customize commands and store them in a JSON fi
    ```bash
    customize "internet" "start chrome"
 This stores the alias internet in the JSON file to run the command start chrome
-When you type internet. The shell automatically executes start chrome.
+When you type internet. The shell automatically executes start chrome command.
 
 
 ### **Launch GoShell**
