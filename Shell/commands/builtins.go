@@ -7,16 +7,20 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
 
 var commandHistory []string
 
-const aliasFile = "command_aliases.json"
+const aliasFile = filepath.Join("command_aliases.json")
 const historyLimit = 10
 
 func SaveToHistory(cmd string) {
+	if cmd == "" {
+		return
+	}
 	if len(commandHistory) >= historyLimit {
 		commandHistory = commandHistory[1:]
 	}
@@ -24,34 +28,25 @@ func SaveToHistory(cmd string) {
 }
 
 func ExecuteCommand(args []string) error {
-	command := args[0]
-	// mapping := json.loads(json_data)
 	if len(args) == 0 {
 		return fmt.Errorf("no command provided")
 	}
 
-	// Load the command aliases from the JSON file
-	file, err := os.Open("command_aliases.json")
-	if err != nil {
-		return fmt.Errorf("failed to open JSON file: %w", err)
-	}
-	defer file.Close()
+	command := args[0]
 
-	var mapping map[string]string
-	byteValue, err := io.ReadAll(file)
+	// Load aliases
+	mapping, err := loadAliases()
 	if err != nil {
-		return fmt.Errorf("failed to read JSON file: %w", err)
+		return fmt.Errorf("failed to load aliases: %w", err)
 	}
 
-	err = json.Unmarshal(byteValue, &mapping)
-	if err != nil {
-		return fmt.Errorf("failed to parse JSON file: %w", err)
-	}
-
+	// Check for alias and replace command
 	if alias, exists := mapping[command]; exists {
+		args[0] = alias
 		command = alias
 	}
 
+	// Now split the potentially replaced command
 	commandCast := strings.Split(command, " ")
 	switch command {
 	case "cd":
