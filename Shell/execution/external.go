@@ -1,22 +1,33 @@
 package execution
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 func ExecuteExternalCommand(args []string) error {
 	var cmd *exec.Cmd
+
 	if runtime.GOOS == "windows" {
 		// On Windows, use `cmd.exe` to execute commands
-		cmd = exec.Command("cmd", append([]string{"/C"}, args...)...)
+		cmdArgs := append([]string{"/C"}, args...)
+		cmd = exec.Command("cmd", cmdArgs...)
 	} else {
 		// On Unix-like systems, use `sh -c` for command execution
-		cmd = exec.Command("sh", "-c", args[0])
+		cmd = exec.Command(args[0], args[1:]...)
 	}
 
-	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	return cmd.Run()
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		return fmt.Errorf("failed to execute command '%s': %w", strings.Join(args, " "), err)
+	}
+
+	return nil
 }
