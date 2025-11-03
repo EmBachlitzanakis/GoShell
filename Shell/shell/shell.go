@@ -8,6 +8,7 @@ import (
 
     "Shell/commands"
     "Shell/utils"
+    "Shell/result"
 )
 
 func StartShell() {
@@ -36,5 +37,9 @@ func HandleInput(input string) error {
     // Save to history and split into args (delegated to commands package)
     commands.SaveToHistory(input)
     args := strings.Split(input, " ")
-    return commands.ExecuteCommand(args)
+    if err := commands.ExecuteCommand(args); err != nil {
+        return result.Err[string](err)
+    }
+    
+    return result.Ok[string](input)
 }
